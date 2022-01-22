@@ -1,5 +1,8 @@
+use crate::player::PlayerComponent;
 use crate::GameState;
 use bevy::prelude::*;
+use bevy_rapier2d::physics::RapierConfiguration;
+use bevy_rapier2d::prelude::RigidBodyVelocityComponent;
 
 pub struct ActionsPlugin;
 
@@ -7,71 +10,50 @@ pub struct ActionsPlugin;
 // Actions can then be used as a resource in other systems to act on the player input.
 impl Plugin for ActionsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<Actions>().add_system_set(
-            SystemSet::on_update(GameState::Playing).with_system(set_movement_actions),
+        app.init_resource::<Actions>()
+            .add_system(exit_game)
+            .add_system_set(
+            SystemSet::on_update(GameState::Playing).with_system(player_movement),
         );
     }
 }
 
 #[derive(Default)]
-pub struct Actions {
-    pub player_movement: Option<Vec2>,
+pub struct Actions;
+
+fn exit_game(
+    keyboard_input: Res<Input<KeyCode>>,
+) {
+    if keyboard_input.pressed(KeyCode::Escape) {
+        std::process::exit(0);
+    }
 }
 
-fn set_movement_actions(mut actions: ResMut<Actions>, keyboard_input: Res<Input<KeyCode>>) {
-    if GameControl::Up.just_released(&keyboard_input)
-        || GameControl::Up.pressed(&keyboard_input)
-        || GameControl::Left.just_released(&keyboard_input)
-        || GameControl::Left.pressed(&keyboard_input)
-        || GameControl::Down.just_released(&keyboard_input)
-        || GameControl::Down.pressed(&keyboard_input)
-        || GameControl::Right.just_released(&keyboard_input)
-        || GameControl::Right.pressed(&keyboard_input)
-    {
-        let mut player_movement = Vec2::ZERO;
+fn player_movement(
+    keyboard_input: Res<Input<KeyCode>>,
+    rapier_config: Res<RapierConfiguration>,
+    mut player_info: Query<(&PlayerComponent, &mut RigidBodyVelocityComponent)>,
+) {
+    for (player, mut rb) in player_info.iter_mut() {
+        let up = GameControl::Up.pressed(&keyboard_input);
+        let down = GameControl::Down.pressed(&keyboard_input);
+        let right = GameControl::Right.pressed(&keyboard_input);
+        let left = GameControl::Left.pressed(&keyboard_input);
 
-        if GameControl::Up.just_released(&keyboard_input)
-            || GameControl::Down.just_released(&keyboard_input)
-        {
-            if GameControl::Up.pressed(&keyboard_input) {
-                player_movement.y = 1.;
-            } else if GameControl::Down.pressed(&keyboard_input) {
-                player_movement.y = -1.;
-            } else {
-                player_movement.y = 0.;
-            }
-        } else if GameControl::Up.just_pressed(&keyboard_input) {
-            player_movement.y = 1.;
-        } else if GameControl::Down.just_pressed(&keyboard_input) {
-            player_movement.y = -1.;
+        let x_axis = -(left as i8) + right as i8;
+        let y_axis = -(down as i8) + up as i8;
+
+        if x_axis != 0 {
+            rb.linvel.x = player.speed * (x_axis as f32) * rapier_config.scale;
         } else {
-            player_movement.y = actions.player_movement.unwrap_or(Vec2::ZERO).y;
+            rb.linvel.x = 0.0;
         }
 
-        if GameControl::Right.just_released(&keyboard_input)
-            || GameControl::Left.just_released(&keyboard_input)
-        {
-            if GameControl::Right.pressed(&keyboard_input) {
-                player_movement.x = 1.;
-            } else if GameControl::Left.pressed(&keyboard_input) {
-                player_movement.x = -1.;
-            } else {
-                player_movement.x = 0.;
-            }
-        } else if GameControl::Right.just_pressed(&keyboard_input) {
-            player_movement.x = 1.;
-        } else if GameControl::Left.just_pressed(&keyboard_input) {
-            player_movement.x = -1.;
+        if y_axis != 0 {
+            rb.linvel.y = player.speed * (y_axis as f32) * rapier_config.scale;
         } else {
-            player_movement.x = actions.player_movement.unwrap_or(Vec2::ZERO).x;
+            rb.linvel.y = 0.0;
         }
-
-        if player_movement != Vec2::ZERO {
-            player_movement = player_movement.normalize();
-            actions.player_movement = Some(player_movement);
-        }
-    } else {
-        actions.player_movement = None;
     }
 }
 

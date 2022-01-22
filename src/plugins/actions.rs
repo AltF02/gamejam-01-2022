@@ -1,4 +1,4 @@
-use crate::player::PlayerComponent;
+use crate::plugins::player::PlayerComponent;
 use crate::GameState;
 use bevy::prelude::*;
 use bevy_rapier2d::physics::RapierConfiguration;

@@ -1,12 +1,11 @@
-use crate::actions::Actions;
-use crate::loading::AudioAssets;
+use crate::plugins::loading::AudioAssets;
 use crate::GameState;
 use bevy::prelude::*;
 use bevy_kira_audio::{Audio, AudioPlugin};
 
 pub struct InternalAudioPlugin;
 
-// This plugin is responsible to controll the game audio
+// This plugin is responsible to control the game audio
 impl Plugin for InternalAudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(AudioPlugin)

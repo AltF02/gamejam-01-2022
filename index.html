@@ -12,8 +12,7 @@
                     black 51%,
                     white 51%,
                     white 100%
-            );
-            background-repeat: repeat;
+            ) repeat;
             background-size: 20px 20px;
             margin: 0;
         }
@@ -90,6 +89,7 @@
     </script>
     <script type="module">
         // load the actual game
+        // noinspection JSFileReferences
         import init from './target/wasm.js'
         init();
     </script>

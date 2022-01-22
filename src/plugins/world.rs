@@ -1,6 +1,13 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+#[derive(Clone, Eq, PartialEq, Debug, Hash)]
+pub enum LevelState {
+    Home,
+    Requiem,
+    Utopia,
+}
+
 pub struct WorldPlugin;
 
 impl Plugin for WorldPlugin {

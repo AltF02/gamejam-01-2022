@@ -1,5 +1,4 @@
-use crate::actions::Actions;
-use crate::loading::TextureAssets;
+use crate::plugins::loading::TextureAssets;
 use crate::GameState;
 use bevy::prelude::*;
 use bevy_rapier2d::physics::{ColliderBundle, RigidBodyBundle, RigidBodyPositionSync};

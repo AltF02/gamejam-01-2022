@@ -12,18 +12,14 @@ impl Plugin for ActionsPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<Actions>()
             .add_system(exit_game)
-            .add_system_set(
-            SystemSet::on_update(GameState::Playing).with_system(player_movement),
-        );
+            .add_system_set(SystemSet::on_update(GameState::Playing).with_system(player_movement));
     }
 }
 
 #[derive(Default)]
 pub struct Actions;
 
-fn exit_game(
-    keyboard_input: Res<Input<KeyCode>>,
-) {
+fn exit_game(keyboard_input: Res<Input<KeyCode>>) {
     if keyboard_input.pressed(KeyCode::Escape) {
         std::process::exit(0);
     }

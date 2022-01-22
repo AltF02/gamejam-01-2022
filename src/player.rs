@@ -19,10 +19,7 @@ pub struct PlayerComponent {
 /// Player logic is only active during the State `GameState::Playing`
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(
-            SystemSet::on_enter(GameState::Playing)
-                .with_system(spawn_player)
-        );
+        app.add_system_set(SystemSet::on_enter(GameState::Playing).with_system(spawn_player));
     }
 }
 

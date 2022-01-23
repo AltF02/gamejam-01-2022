@@ -1,10 +1,10 @@
 // disable console on windows for release builds
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use bad_software::GamePlugin;
 use bevy::prelude::{App, ClearColor, Color, Msaa, WindowDescriptor};
 use bevy::window::WindowMode;
 use bevy::DefaultPlugins;
-use bevy_game::GamePlugin;
 
 fn main() {
     App::new()
@@ -12,7 +12,7 @@ fn main() {
         .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.1)))
         .insert_resource(WindowDescriptor {
             title: "Bad Software".to_string(),
-            // mode: WindowMode::BorderlessFullscreen,
+            mode: WindowMode::BorderlessFullscreen,
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)

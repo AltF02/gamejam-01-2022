@@ -42,8 +42,7 @@ impl Plugin for GamePlugin {
             .add_plugin(CameraPlugin)
             .add_plugin(InteractablePlugin)
             .add_plugin(PlayerPlugin)
-            .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
-            .add_plugin(RapierRenderPlugin);
+            .add_plugin(RapierPhysicsPlugin::<NoUserData>::default());
 
         #[cfg(debug_assertions)]
         {
@@ -51,7 +50,8 @@ impl Plugin for GamePlugin {
 
             app.add_plugin(FrameTimeDiagnosticsPlugin::default())
                 .add_plugin(LogDiagnosticsPlugin::default())
-                .add_plugin(WorldInspectorPlugin::new());
+                .add_plugin(WorldInspectorPlugin::new())
+                .add_plugin(RapierRenderPlugin);
         }
     }
 }

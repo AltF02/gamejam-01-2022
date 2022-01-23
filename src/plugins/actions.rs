@@ -17,7 +17,9 @@ impl Plugin for ActionsPlugin {
 }
 
 #[derive(Default)]
-pub struct Actions;
+pub struct Actions {
+    pub player_movement: bool,
+}
 
 fn exit_game(keyboard_input: Res<Input<KeyCode>>) {
     if keyboard_input.pressed(KeyCode::Escape) {
@@ -29,12 +31,15 @@ fn player_movement(
     keyboard_input: Res<Input<KeyCode>>,
     rapier_config: Res<RapierConfiguration>,
     mut player_info: Query<(&PlayerComponent, &mut RigidBodyVelocityComponent)>,
+    mut actions: ResMut<Actions>,
 ) {
     for (player, mut rb) in player_info.iter_mut() {
         let up = GameControl::Up.pressed(&keyboard_input);
         let down = GameControl::Down.pressed(&keyboard_input);
         let right = GameControl::Right.pressed(&keyboard_input);
         let left = GameControl::Left.pressed(&keyboard_input);
+
+        actions.player_movement = up || left || down || right;
 
         let x_axis = -(left as i8) + right as i8;
         let y_axis = -(down as i8) + up as i8;

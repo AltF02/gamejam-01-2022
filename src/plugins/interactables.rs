@@ -15,10 +15,6 @@ use bevy_rapier2d::prelude::*;
 use serde::Deserialize;
 use std::fmt::Formatter;
 
-const INTERACTABLE_ICON_Z: f32 = 11.0;
-const INTERACTABLE_ICON_SPRITE_SCALE: f32 = 2.5;
-const INTERACTABLE_ICON_Y_OFFSET: f32 = 6.0;
-
 #[derive(Deserialize, Hash, Clone, Debug, PartialEq, Eq)]
 pub enum InteractableType {
     Desk,
@@ -148,7 +144,6 @@ pub fn check_interactables_system(
     interactable_query: Query<&InteractableComponent>,
     mut player_query: Query<(&Transform, &mut PlayerComponent)>,
     interactable_icon_query: Query<Entity, With<InteractableIconComponent>>,
-    rapier_config: Res<RapierConfiguration>,
 ) {
     for (player_transform, mut player_component) in player_query.iter_mut() {
         let mut interactable_in_range: Option<InteractableType> = None;

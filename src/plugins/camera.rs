@@ -1,7 +1,6 @@
 use crate::plugins::player::PlayerComponent;
 use crate::GameState;
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::RigidBodyVelocityComponent;
 
 #[derive(Component)]
 pub struct Camera;

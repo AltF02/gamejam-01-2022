@@ -20,7 +20,6 @@ use bevy::app::App;
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
 use bevy_rapier2d::physics::{NoUserData, RapierPhysicsPlugin};
-use bevy_rapier2d::render::RapierRenderPlugin;
 use plugins::world::WorldPlugin;
 
 // This example game uses States to separate logic

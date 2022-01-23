@@ -19,7 +19,7 @@ pub fn interact_desk_system(
     audio_assets: Res<AudioAssets>,
     texture_assets: Res<TextureAssets>,
     audio: Res<Audio>,
-    computer_state: Res<ComputerState>,
+    // computer_state: Res<ComputerState>,
     mut commands: Commands,
 ) {
     for player_component in player_query.iter() {

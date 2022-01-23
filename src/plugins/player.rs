@@ -2,7 +2,6 @@ use crate::plugins::interactables::InteractableType;
 use crate::plugins::loading::TextureAssets;
 use crate::GameState;
 use bevy::prelude::*;
-use bevy::sprite::MaterialMesh2dBundle;
 use bevy_rapier2d::physics::{ColliderBundle, RigidBodyBundle, RigidBodyPositionSync};
 use bevy_rapier2d::prelude::{
     ColliderDebugRender, ColliderMaterial, ColliderMaterialComponent, ColliderShape,

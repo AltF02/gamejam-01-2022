@@ -20,7 +20,7 @@ use plugins::world::WorldPlugin;
 // See https://bevy-cheatbook.github.io/programming/states.html
 // Or https://github.com/bevyengine/bevy/blob/main/examples/ecs/state.rs
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
-enum GameState {
+pub enum GameState {
     // During the loading State the LoadingPlugin will load our assets
     Loading,
     // During this State the actual game logic is executed

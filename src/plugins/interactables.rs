@@ -2,12 +2,15 @@
 // © TheRealTeamFReSh
 // Mostly copied code and modified to fit from https://github.com/TheRealTeamFReSh/MurderUserDungeon/blob/master/src/apartment/interactable.rs
 
+mod plant;
+
 use crate::plugins::player::PlayerComponent;
 use crate::GameState;
 use bevy::prelude::*;
 use bevy::utils::HashMap;
 use bevy_rapier2d::prelude::*;
 use serde::Deserialize;
+use std::fmt::{format, Formatter};
 
 #[derive(Deserialize, Hash, Clone, Debug, PartialEq, Eq)]
 pub enum InteractableType {
@@ -24,15 +27,27 @@ pub struct InteractableData {
     pub range: f32,
 }
 
+impl std::fmt::Display for InteractableType {
+    fn fmt<'a>(&self, f: &mut Formatter<'a>) -> std::fmt::Result {
+        match self {
+            InteractableType::Bed => write!(f, "Bed"),
+            InteractableType::Desk => write!(f, "Desk"),
+            InteractableType::Plant => write!(f, "Plant"),
+            InteractableType::Radio => write!(f, "Radio"),
+        }
+    }
+}
+
 #[derive(Deserialize)]
 pub struct InteractablesResource {
     pub interactables: HashMap<InteractableType, InteractableData>,
 }
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct InteractableComponent {
     pub interactable_type: InteractableType,
     pub range: f32,
+    pub transform: Transform,
 }
 
 pub struct InteractablePlugin;
@@ -43,7 +58,12 @@ impl Plugin for InteractablePlugin {
             SystemSet::on_enter(GameState::Playing).with_system(setup.label("interactables_setup")),
         )
         .add_system_set(
-            SystemSet::on_update(GameState::Playing).with_system(check_interactables_system),
+            SystemSet::on_update(GameState::Playing)
+                .with_system(check_interactables_system.label("check_interactables")),
+        )
+        .add_system_set(
+            SystemSet::on_update(GameState::Playing)
+                .with_system(plant::interact_plant_system.after("check_interactables")),
         );
     }
 }
@@ -74,16 +94,18 @@ fn spawn_item(
     interactables_resource: &InteractablesResource,
 ) {
     let interactable_data = &interactables_resource.interactables[&interactable_type];
+    let type_string = format!("{}", interactable_type.clone());
 
     commands
         .spawn()
         .insert(InteractableComponent {
-            interactable_type,
+            interactable_type: interactable_type.clone(),
             range: interactable_data.range,
+            transform: Transform::from_translation(interactable_data.position.extend(0.)),
         })
         .insert_bundle(RigidBodyBundle {
             body_type: RigidBodyTypeComponent(RigidBodyType::Static),
-            position: interactable_data.position.into(),
+            position: RigidBodyPositionComponent(interactable_data.position.into()),
             ..Default::default()
         })
         .insert_bundle(ColliderBundle {
@@ -100,19 +122,19 @@ fn spawn_item(
         })
         .insert(RigidBodyPositionSync::Discrete)
         .insert(ColliderDebugRender::default())
-        .insert(Name::new("Desk"));
+        .insert(Name::new(type_string));
 }
 
 pub fn check_interactables_system(
-    interactable_query: Query<(&InteractableComponent, &Transform)>,
+    interactable_query: Query<&InteractableComponent>,
     mut player_query: Query<(&Transform, &mut PlayerComponent)>,
 ) {
     for (player_transform, mut player_component) in player_query.iter_mut() {
         let mut interactable_in_range: Option<InteractableType> = None;
-        for (interactable_component, interactable_transform) in interactable_query.iter() {
+        for interactable_component in interactable_query.iter() {
             let interactable_position = Vec2::new(
-                interactable_transform.translation.x,
-                interactable_transform.translation.y,
+                interactable_component.transform.translation.x * 10.,
+                interactable_component.transform.translation.y * 10.,
             );
             let player_position = Vec2::new(
                 player_transform.translation.x,

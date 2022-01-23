@@ -12,7 +12,7 @@ fn main() {
         .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
         .insert_resource(WindowDescriptor {
             title: "Bevy game".to_string(), // TODO,
-            mode: WindowMode::BorderlessFullscreen,
+            // mode: WindowMode::BorderlessFullscreen,
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)

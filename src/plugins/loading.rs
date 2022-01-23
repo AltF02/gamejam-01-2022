@@ -1,7 +1,9 @@
+use crate::plugins::interactables::InteractablesResource;
 use crate::GameState;
 use bevy::prelude::*;
 use bevy_asset_loader::{AssetCollection, AssetLoader};
 use bevy_kira_audio::AudioSource;
+use ron::de::from_bytes;
 
 pub struct LoadingPlugin;
 
@@ -10,6 +12,13 @@ pub struct LoadingPlugin;
 /// If interested, take a look at https://bevy-cheatbook.github.io/features/assets.html
 impl Plugin for LoadingPlugin {
     fn build(&self, app: &mut App) {
+        app.insert_resource(
+            from_bytes::<InteractablesResource>(include_bytes!(
+                "../../data/scenes/interactables.ron"
+            ))
+            .unwrap(),
+        );
+
         AssetLoader::new(GameState::Loading)
             .with_collection::<FontAssets>()
             .with_collection::<AudioAssets>()

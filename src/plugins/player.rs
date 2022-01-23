@@ -1,3 +1,4 @@
+use crate::plugins::interactables::InteractableType;
 use crate::plugins::loading::TextureAssets;
 use crate::GameState;
 use bevy::prelude::*;
@@ -13,6 +14,7 @@ pub struct PlayerPlugin;
 #[derive(Component)]
 pub struct PlayerComponent {
     pub speed: f32,
+    pub interactable_in_range: Option<InteractableType>,
 }
 
 /// This plugin handles player related stuff like movement
@@ -26,7 +28,10 @@ impl Plugin for PlayerPlugin {
 fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {
     commands
         .spawn()
-        .insert(PlayerComponent { speed: 1.5 })
+        .insert(PlayerComponent {
+            speed: 1.5,
+            interactable_in_range: None,
+        })
         .insert_bundle(SpriteBundle {
             texture: texture_assets.texture_player.clone(),
             transform: Transform::from_translation(Vec3::new(0.0, 0.0, 1.)),
@@ -45,7 +50,10 @@ fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {
         .insert_bundle((
             RigidBodyPositionSync::Discrete,
             Name::new("Player"),
-            PlayerComponent { speed: 1.5 },
+            PlayerComponent {
+                speed: 1.5,
+                interactable_in_range: None,
+            },
         ))
         .insert(ColliderDebugRender::default())
         .with_children(|parent| {

@@ -27,8 +27,7 @@ fn follow_player(
 ) {
     for pt in player.iter() {
         for mut ct in camera.iter_mut() {
-            ct.translation.x = pt.translation.x;
-            ct.translation.y = pt.translation.y;
+            ct.translation = pt.translation;
         }
     }
 }

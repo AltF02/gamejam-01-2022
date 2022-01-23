@@ -7,6 +7,7 @@ use plugins::menu::MenuPlugin;
 use plugins::player::PlayerPlugin;
 
 use crate::plugins::camera::CameraPlugin;
+use crate::plugins::interactables::InteractablePlugin;
 use bevy::app::App;
 #[cfg(debug_assertions)]
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
@@ -39,6 +40,7 @@ impl Plugin for GamePlugin {
             .add_plugin(InternalAudioPlugin)
             .add_plugin(WorldPlugin)
             .add_plugin(CameraPlugin)
+            .add_plugin(InteractablePlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
             .add_plugin(RapierRenderPlugin);

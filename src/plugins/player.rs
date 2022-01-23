@@ -1,10 +1,11 @@
 use crate::plugins::loading::TextureAssets;
 use crate::GameState;
 use bevy::prelude::*;
+use bevy::sprite::MaterialMesh2dBundle;
 use bevy_rapier2d::physics::{ColliderBundle, RigidBodyBundle, RigidBodyPositionSync};
 use bevy_rapier2d::prelude::{
-    ColliderMaterial, ColliderMaterialComponent, ColliderShape, ColliderShapeComponent,
-    RigidBodyMassPropsFlags, RigidBodyType, RigidBodyTypeComponent,
+    ColliderDebugRender, ColliderMaterial, ColliderMaterialComponent, ColliderShape,
+    ColliderShapeComponent, RigidBodyMassPropsFlags, RigidBodyType, RigidBodyTypeComponent,
 };
 
 pub struct PlayerPlugin;
@@ -22,13 +23,13 @@ impl Plugin for PlayerPlugin {
     }
 }
 
-fn spawn_player(mut commands: Commands, textures: Res<TextureAssets>) {
+fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {
     commands
         .spawn()
         .insert(PlayerComponent { speed: 1.5 })
         .insert_bundle(SpriteBundle {
-            texture: textures.texture_bevy.clone(),
-            transform: Transform::from_translation(Vec3::new(0., 0., 1.)),
+            texture: texture_assets.texture_player.clone(),
+            transform: Transform::from_translation(Vec3::new(0.0, 0.0, 1.)),
             ..Default::default()
         })
         .insert_bundle(RigidBodyBundle {
@@ -42,9 +43,10 @@ fn spawn_player(mut commands: Commands, textures: Res<TextureAssets>) {
             Name::new("Player"),
             PlayerComponent { speed: 1.5 },
         ))
+        .insert(ColliderDebugRender::default())
         .with_children(|parent| {
             parent.spawn().insert_bundle(ColliderBundle {
-                shape: ColliderShapeComponent(ColliderShape::cuboid(3.0, 1.0)),
+                shape: ColliderShapeComponent(ColliderShape::cuboid(3., 1.)),
                 position: Vec2::new(0.0, -3.8).into(),
                 material: ColliderMaterialComponent(ColliderMaterial {
                     friction: 0.0,

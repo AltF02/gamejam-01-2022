@@ -61,27 +61,6 @@ enum GameControl {
 }
 
 impl GameControl {
-    fn just_released(&self, keyboard_input: &Res<Input<KeyCode>>) -> bool {
-        match self {
-            GameControl::Up => {
-                keyboard_input.just_released(KeyCode::W)
-                    || keyboard_input.just_released(KeyCode::Up)
-            }
-            GameControl::Down => {
-                keyboard_input.just_released(KeyCode::S)
-                    || keyboard_input.just_released(KeyCode::Down)
-            }
-            GameControl::Left => {
-                keyboard_input.just_released(KeyCode::A)
-                    || keyboard_input.just_released(KeyCode::Left)
-            }
-            GameControl::Right => {
-                keyboard_input.just_released(KeyCode::D)
-                    || keyboard_input.just_released(KeyCode::Right)
-            }
-        }
-    }
-
     fn pressed(&self, keyboard_input: &Res<Input<KeyCode>>) -> bool {
         match self {
             GameControl::Up => {
@@ -95,26 +74,6 @@ impl GameControl {
             }
             GameControl::Right => {
                 keyboard_input.pressed(KeyCode::D) || keyboard_input.pressed(KeyCode::Right)
-            }
-        }
-    }
-
-    fn just_pressed(&self, keyboard_input: &Res<Input<KeyCode>>) -> bool {
-        match self {
-            GameControl::Up => {
-                keyboard_input.just_pressed(KeyCode::W) || keyboard_input.just_pressed(KeyCode::Up)
-            }
-            GameControl::Down => {
-                keyboard_input.just_pressed(KeyCode::S)
-                    || keyboard_input.just_pressed(KeyCode::Down)
-            }
-            GameControl::Left => {
-                keyboard_input.just_pressed(KeyCode::A)
-                    || keyboard_input.just_pressed(KeyCode::Left)
-            }
-            GameControl::Right => {
-                keyboard_input.just_pressed(KeyCode::D)
-                    || keyboard_input.just_pressed(KeyCode::Right)
             }
         }
     }

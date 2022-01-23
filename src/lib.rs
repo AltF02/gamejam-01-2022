@@ -6,10 +6,13 @@ use plugins::loading::LoadingPlugin;
 use plugins::menu::MenuPlugin;
 use plugins::player::PlayerPlugin;
 
+use crate::plugins::camera::CameraPlugin;
 use bevy::app::App;
 #[cfg(debug_assertions)]
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
+use bevy_rapier2d::physics::{NoUserData, RapierPhysicsPlugin};
+use bevy_rapier2d::render::RapierRenderPlugin;
 use plugins::world::WorldPlugin;
 
 // This example game uses States to separate logic
@@ -35,7 +38,10 @@ impl Plugin for GamePlugin {
             .add_plugin(ActionsPlugin)
             .add_plugin(InternalAudioPlugin)
             .add_plugin(WorldPlugin)
-            .add_plugin(PlayerPlugin);
+            .add_plugin(CameraPlugin)
+            .add_plugin(PlayerPlugin)
+            .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+            .add_plugin(RapierRenderPlugin);
 
         #[cfg(debug_assertions)]
         {

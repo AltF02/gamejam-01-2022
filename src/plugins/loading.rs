@@ -59,6 +59,8 @@ pub struct TextureAssets {
     pub texture_player: Handle<Image>,
     #[asset(path = "textures/room.png")]
     pub texture_room: Handle<Image>,
+    #[asset(path = "textures/room_exploded.png")]
+    pub texture_room_exploded: Handle<Image>,
     #[asset(path = "textures/e_key.png")]
     pub texture_e_key: Handle<Image>,
 }

@@ -42,8 +42,8 @@ impl Plugin for GamePlugin {
             .add_plugin(CameraPlugin)
             .add_plugin(InteractablePlugin)
             .add_plugin(PlayerPlugin)
-            .add_plugin(RapierPhysicsPlugin::<NoUserData>::default());
-        // .add_plugin(RapierRenderPlugin);
+            .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+            .add_plugin(RapierRenderPlugin);
 
         #[cfg(debug_assertions)]
         {

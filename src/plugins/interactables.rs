@@ -14,6 +14,7 @@ pub enum InteractableType {
     Desk,
     Bed,
     Radio,
+    Plant,
 }
 
 #[derive(Deserialize)]
@@ -52,7 +53,19 @@ fn setup(mut commands: Commands, interactables_resource: Res<InteractablesResour
         &mut commands,
         InteractableType::Desk,
         &interactables_resource,
-    )
+    );
+
+    spawn_item(
+        &mut commands,
+        InteractableType::Bed,
+        &interactables_resource,
+    );
+
+    spawn_item(
+        &mut commands,
+        InteractableType::Plant,
+        &interactables_resource,
+    );
 }
 
 fn spawn_item(

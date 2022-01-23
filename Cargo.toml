@@ -1,5 +1,5 @@
 [package]
-name = "bevy_game" # ToDo
+name = "bad_software"
 version = "0.1.0"
 publish = false
 authors = ["Matthew Bakhtiari <dev@mtbk.me", "Elijah <bruisedsalads@gmail.com>", "Tyr <w0lfizaudio@gmail.com>"]

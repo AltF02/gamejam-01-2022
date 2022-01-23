@@ -18,6 +18,14 @@ impl Plugin for InternalAudioPlugin {
 }
 
 fn start_audio(audio_assets: Res<AudioAssets>, audio: Res<Audio>) {
+    audio.set_volume_in_channel(1., &AudioChannel::new("background_music".to_string()));
+    audio.play_looped_in_channel(
+        audio_assets.background_music.clone(),
+        &AudioChannel::new("background_music".to_string()),
+    );
+
+    audio.set_volume_in_channel(1., &AudioChannel::new("computer".to_string()));
+
     audio.set_volume_in_channel(1., &AudioChannel::new("walking".to_string()));
     audio.play_looped_in_channel(
         audio_assets.walking.clone(),

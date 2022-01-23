@@ -119,7 +119,7 @@ fn setup(
         })
         .insert(ColliderDebugRender::default())
         .insert(RigidBodyPositionSync::Discrete)
-        .insert(Name::new("Right Wall"));
+        .insert(Name::new("Left Wall"));
 
     // let type_registry = commands.get
 }

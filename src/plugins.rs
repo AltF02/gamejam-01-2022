@@ -1,6 +1,7 @@
 pub mod actions;
 pub mod audio;
 pub mod camera;
+pub mod hud;
 pub mod interactables;
 pub mod loading;
 pub mod menu;

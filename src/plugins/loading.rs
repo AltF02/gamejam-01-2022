@@ -45,6 +45,12 @@ pub struct AudioAssets {
     pub radio_static: Handle<AudioSource>,
     #[asset(path = "audio/computer_startup.ogg")]
     pub computer_startup: Handle<AudioSource>,
+    #[asset(path = "audio/computer_idle.ogg")]
+    pub computer_idle: Handle<AudioSource>,
+    #[asset(path = "audio/music.ogg")]
+    pub background_music: Handle<AudioSource>,
+    #[asset(path = "audio/explosion.ogg")]
+    pub explosion: Handle<AudioSource>,
 }
 
 #[derive(AssetCollection)]
@@ -53,4 +59,6 @@ pub struct TextureAssets {
     pub texture_player: Handle<Image>,
     #[asset(path = "textures/room.png")]
     pub texture_room: Handle<Image>,
+    #[asset(path = "textures/e_key.png")]
+    pub texture_e_key: Handle<Image>,
 }

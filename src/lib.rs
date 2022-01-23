@@ -1,3 +1,10 @@
+#![allow(clippy::type_complexity)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::too_many_lines)]
+#![allow(clippy::must_use_candidate)]
+#![allow(clippy::needless_pass_by_value)]
+#![allow(clippy::enum_glob_use)]
+
 mod plugins;
 
 use plugins::actions::ActionsPlugin;
@@ -50,8 +57,8 @@ impl Plugin for GamePlugin {
 
             app.add_plugin(FrameTimeDiagnosticsPlugin::default())
                 .add_plugin(LogDiagnosticsPlugin::default())
-                .add_plugin(WorldInspectorPlugin::new())
-                .add_plugin(RapierRenderPlugin);
+                .add_plugin(WorldInspectorPlugin::new());
+            // .add_plugin(RapierRenderPlugin);
         }
     }
 }

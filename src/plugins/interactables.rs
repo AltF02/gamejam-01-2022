@@ -5,6 +5,8 @@
 mod desk;
 mod plant;
 
+use crate::plugins::interactables::desk::ComputerState;
+use crate::plugins::loading::TextureAssets;
 use crate::plugins::player::PlayerComponent;
 use crate::GameState;
 use bevy::prelude::*;
@@ -12,6 +14,10 @@ use bevy::utils::HashMap;
 use bevy_rapier2d::prelude::*;
 use serde::Deserialize;
 use std::fmt::Formatter;
+
+const INTERACTABLE_ICON_Z: f32 = 11.0;
+const INTERACTABLE_ICON_SPRITE_SCALE: f32 = 2.5;
+const INTERACTABLE_ICON_Y_OFFSET: f32 = 6.0;
 
 #[derive(Deserialize, Hash, Clone, Debug, PartialEq, Eq)]
 pub enum InteractableType {
@@ -55,21 +61,23 @@ pub struct InteractablePlugin;
 
 impl Plugin for InteractablePlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(
-            SystemSet::on_enter(GameState::Playing).with_system(setup.label("interactables_setup")),
-        )
-        .add_system_set(
-            SystemSet::on_update(GameState::Playing)
-                .with_system(check_interactables_system.label("check_interactables")),
-        )
-        .add_system_set(
-            SystemSet::on_update(GameState::Playing)
-                .with_system(desk::interact_desk_system.after("check_interactables")),
-        )
-        .add_system_set(
-            SystemSet::on_update(GameState::Playing)
-                .with_system(plant::interact_plant_system.after("check_interactables")),
-        );
+        app.insert_resource(ComputerState::Off)
+            .add_system_set(
+                SystemSet::on_enter(GameState::Playing)
+                    .with_system(setup.label("interactables_setup")),
+            )
+            .add_system_set(
+                SystemSet::on_update(GameState::Playing)
+                    .with_system(check_interactables_system.label("check_interactables")),
+            )
+            .add_system_set(
+                SystemSet::on_update(GameState::Playing)
+                    .with_system(desk::interact_desk_system.after("check_interactables")),
+            )
+            .add_system_set(
+                SystemSet::on_update(GameState::Playing)
+                    .with_system(plant::interact_plant_system.after("check_interactables")),
+            );
     }
 }
 
@@ -130,9 +138,17 @@ fn spawn_item(
         .insert(Name::new(type_string));
 }
 
+#[derive(Component)]
+pub struct InteractableIconComponent;
+
 pub fn check_interactables_system(
+    mut commands: Commands,
+    texture_assets: Res<TextureAssets>,
+    interactables_resource: Res<InteractablesResource>,
     interactable_query: Query<&InteractableComponent>,
     mut player_query: Query<(&Transform, &mut PlayerComponent)>,
+    interactable_icon_query: Query<Entity, With<InteractableIconComponent>>,
+    rapier_config: Res<RapierConfiguration>,
 ) {
     for (player_transform, mut player_component) in player_query.iter_mut() {
         let mut interactable_in_range: Option<InteractableType> = None;
@@ -160,8 +176,47 @@ pub fn check_interactables_system(
         // spawn interact icon
         if old_interactable != interactable_in_range {
             if let Some(interactable_type) = interactable_in_range {
-                println!("Interacting with {:?}", interactable_type)
+                // spawn interact icon
+                spawn_interact_icon(
+                    texture_assets.texture_e_key.clone(),
+                    &interactable_type,
+                    &mut commands,
+                    &interactables_resource,
+                );
+            } else {
+                for interactable_icon_entity in interactable_icon_query.iter() {
+                    commands.entity(interactable_icon_entity).despawn();
+                }
             }
         }
     }
+}
+
+/// Spawn an interactable icon
+fn spawn_interact_icon(
+    texture: Handle<Image>,
+    interactable_type: &InteractableType,
+    commands: &mut Commands,
+    interactables_resource: &InteractablesResource,
+) {
+    let interactable_data = &interactables_resource.interactables[interactable_type];
+    let transform = Transform::from_translation(Vec3::new(
+        interactable_data.position.x * 10.,
+        interactable_data.position.y * 10. + 50.,
+        1.,
+    ));
+
+    commands
+        .spawn()
+        .insert(InteractableIconComponent)
+        .insert_bundle(SpriteBundle {
+            texture,
+            transform,
+            sprite: Sprite {
+                custom_size: Some(Vec2::new(50., 50.)),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
+        .insert(Name::new("Interactable Icon"));
 }

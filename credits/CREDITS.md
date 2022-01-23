@@ -6,4 +6,5 @@
 
 ## Assets
 
-* Bevy icon: [MIT License](licenses/LICENSE_MIT.md); Copyright (c) 2020 Carter Anderson
+* Textures: [CC0 1.0 Universal](licenses/LICENSE_CC0-1.0.md); Copyright (c) 2022 Elijah
+* Audio: [CC0 1.0 Universal](licenses/LICENSE_CC0-1.0.md); Copyright (c) 2022 Tyr

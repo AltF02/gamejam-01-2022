@@ -2,6 +2,7 @@
 // © TheRealTeamFReSh
 // Mostly copied code and modified to fit from https://github.com/TheRealTeamFReSh/MurderUserDungeon/blob/master/src/apartment/interactable.rs
 
+mod desk;
 mod plant;
 
 use crate::plugins::player::PlayerComponent;
@@ -10,7 +11,7 @@ use bevy::prelude::*;
 use bevy::utils::HashMap;
 use bevy_rapier2d::prelude::*;
 use serde::Deserialize;
-use std::fmt::{format, Formatter};
+use std::fmt::Formatter;
 
 #[derive(Deserialize, Hash, Clone, Debug, PartialEq, Eq)]
 pub enum InteractableType {
@@ -60,6 +61,10 @@ impl Plugin for InteractablePlugin {
         .add_system_set(
             SystemSet::on_update(GameState::Playing)
                 .with_system(check_interactables_system.label("check_interactables")),
+        )
+        .add_system_set(
+            SystemSet::on_update(GameState::Playing)
+                .with_system(desk::interact_desk_system.after("check_interactables")),
         )
         .add_system_set(
             SystemSet::on_update(GameState::Playing)

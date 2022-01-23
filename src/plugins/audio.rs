@@ -1,3 +1,4 @@
+use crate::plugins::actions::Actions;
 use crate::plugins::loading::AudioAssets;
 use crate::GameState;
 use bevy::prelude::*;
@@ -18,14 +19,14 @@ impl Plugin for InternalAudioPlugin {
 
 fn start_audio(audio_assets: Res<AudioAssets>, audio: Res<Audio>) {
     audio.set_volume(0.3);
-    audio.play_looped(audio_assets.flying.clone());
+    audio.play_looped(audio_assets.walking.clone());
     audio.pause();
 }
 
-// fn control_flying_sound(actions: Res<Actions>, audio: Res<Audio>) {
-//     if actions.player_movement.is_some() {
-//         audio.resume();
-//     } else {
-//         audio.pause()
-//     }
-// }
+fn control_flying_sound(actions: Res<Actions>, audio: Res<Audio>) {
+    if actions.player_movement.is_some() {
+        audio.resume();
+    } else {
+        audio.pause()
+    }
+}

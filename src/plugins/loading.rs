@@ -30,8 +30,12 @@ pub struct FontAssets {
 
 #[derive(AssetCollection)]
 pub struct AudioAssets {
-    #[asset(path = "audio/flying.ogg")]
-    pub flying: Handle<AudioSource>,
+    #[asset(path = "audio/walking.ogg")]
+    pub walking: Handle<AudioSource>,
+    #[asset(path = "audio/radio_static.ogg")]
+    pub radio_static: Handle<AudioSource>,
+    #[asset(path = "audio/computer_startup.ogg")]
+    pub computer_startup: Handle<AudioSource>,
 }
 
 #[derive(AssetCollection)]

@@ -30,6 +30,10 @@ fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {
         .insert_bundle(SpriteBundle {
             texture: texture_assets.texture_player.clone(),
             transform: Transform::from_translation(Vec3::new(0.0, 0.0, 1.)),
+            sprite: Sprite {
+                custom_size: Some(Vec2::new(71., 99.)),
+                ..Default::default()
+            },
             ..Default::default()
         })
         .insert_bundle(RigidBodyBundle {
